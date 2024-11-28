@@ -1,0 +1,39 @@
+Consider the following tables:
+Books(BNo, Bname, Author, Publisher, price, DOP, status)
+IssueReturn(Mem_ID, BNo, Issue_Dt, Return_Dt, fine)
+
+1.
+Write a procedure to update the price of the given book
+(BNo and NewPrice are input parameters).
+
+-->
+delimiter //
+create procedure updatePrice(In newbno int, In newPrice decimal(10,2))
+begin
+update books set price=newPrice where bno=newbno;
+end//
+
+
+2.
+Write a function which accepts the Author Name as input and returns the number of books
+written by him/ her
+-->
+delimiter //
+create function count_books(aname varchar(230))
+returns int
+DETERMINISTIC
+begin
+declare done boolean default true;
+declare author_name varchar(200);
+declare count int default 0;
+declare c1 cursor for select Author from Books;
+declare continue handler for not found set done = false;
+open c1;
+while done do
+fetch c1 into author_name;
+if author_name = aname then
+  set count=count+1;
+end if;
+end while;
+return count;
+end//

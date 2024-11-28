@@ -1,0 +1,9 @@
+1. Write a trigger which will convert the c_name to upper-case before inserting a new record in Customer table. 
+-->
+delimiter //
+create trigger upper_case
+before insert on customer
+for each row
+begin
+set new.c_name=upper(new.c_name);
+end//
