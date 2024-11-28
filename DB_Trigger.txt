@@ -7,3 +7,34 @@ for each row
 begin
 set new.c_name=upper(new.c_name);
 end//
+
+
+2. 
+ Write a trigger that ensures a column email in the users table is always stored in lowercase before inserting or updating a row.
+
+delimiter //
+ create trigger insert_lower_email
+ before insert  on users
+ for each row
+ begin
+ set new.email=lower(new.email);
+ end//
+
+ create trigger update_lower_email
+ before update on users
+ for each row
+ begin
+ set new.email=lower(new.email);
+ end//
+
+ 3.Write a trigger that automatically logs every new row added to the orders table into a separate order_logs table, recording the order ID, customer ID, and insertion timestamp.
+-->
+delimiter //
+create trigger add_logs
+after insert on orders
+for each row
+begin
+insert into order_logs(order_id,customer_id,log_timestamp) values(new.order_id, new.customer_id, now());
+end//
+
+4. Write a trigger that prevents the insertion of rows into the employees table if the salary column is less than 3000. Display a custom error message.
