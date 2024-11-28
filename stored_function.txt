@@ -1,0 +1,43 @@
+1. Write a stored function which takes customer number as input parameter and returns count of purchase done by that customer.
+-->
+delimiter //
+create function count_purchase(newc_no int)
+returns int
+deterministic
+begin
+declare count int default 0;
+declare purchase_count int;
+declare done boolean default true;
+declare c1 cursor for select p_no from purchase where c_no=newc_no;
+declare continue handler for not found set done=false;
+open c1;
+while done do
+fetch c1 into purchase_count;
+set count=count+1;
+end while;
+close c1;
+set count=count-1;
+return count;
+end//
+
+2. Stored Function Assignment to count Number of class for Result table.
+[Note: Refer to Result table created for stored procedure ]
+-->
+delimiter //
+create function count_class(newclass varchar(30))
+returns int
+deterministic
+begin
+declare done boolean default true;
+declare count int default 0;
+declare fetched_class varchar(30);
+declare c1 cursor for select class from result where class=newclass;
+declare continue handler for not found set done=false;
+open c1;
+while done do
+fetch c1 into fetched_class;
+set count=count+1;
+end while;
+set count=count-1;
+return count;
+end//

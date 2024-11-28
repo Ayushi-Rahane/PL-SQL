@@ -38,3 +38,26 @@ insert into order_logs(order_id,customer_id,log_timestamp) values(new.order_id, 
 end//
 
 4. Write a trigger that prevents the insertion of rows into the employees table if the salary column is less than 3000. Display a custom error message.
+-->
+delimiter //
+create trigger error_salary
+before insert on employees
+for each row
+begin
+if new.salary<3000 then
+signal SQLSTATE '45000'
+set message_text = "Salary is less than 3000";
+end if;
+end//
+delimiter ;
+
+
+5. Customer( c_no, c_name, c_city,c_mobile). Ex_customer( c_no, c_name, c_city,c_mobile, action,action_date). Write a trigger which will add the customer record to the Ex_customer table when it is deleted from the customer table. 
+-->
+delimiter //
+create trigger add_ex_cust
+after delete on customer
+for each row
+begin
+insert into ex_customer(c_no, c_name, c_city, action) values(old.c_no, old.c_name, old.c_city, "Delete");
+end//
